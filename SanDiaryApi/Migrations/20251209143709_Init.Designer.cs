@@ -11,8 +11,8 @@ using SanDiaryApi.Data;
 namespace SanDiaryApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251209142830_init")]
-    partial class init
+    [Migration("20251209143709_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
