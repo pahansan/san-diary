@@ -1,0 +1,6 @@
+@SanDiaryApi_HostAddress = http://localhost:5062
+
+GET {{SanDiaryApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
