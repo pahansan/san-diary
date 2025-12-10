@@ -41,7 +41,7 @@ namespace SanDiaryApi.Services
             return Result<Note>.Success(note);
         }
 
-        public async Task<Result<List<Note>>> GetNotesByUserIdAsync(GetNotesByUserIdRequest req, int userId)
+        public async Task<Result<List<Note>>> GetNotesByUserIdAsync(int userId)
         {
             var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
             if (!userExists)

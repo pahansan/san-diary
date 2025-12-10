@@ -10,8 +10,8 @@ namespace SanDiaryApi.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/v1/notes")]
-    public class NotesController(NoteService noteService) : ControllerBase
+    [Route("api/v1/[controller]")]
+    public class NoteController(NoteService noteService) : ControllerBase
     {
         private readonly NoteService _noteService = noteService;
         private int GetCurrentUserId()
@@ -20,14 +20,14 @@ namespace SanDiaryApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Note>> Create([FromBody] CreateNoteRequest req)
+        public async Task<ActionResult<Note>> Create(CreateNoteRequest req)
         {
             var userId = GetCurrentUserId();
 
             var result = await _noteService.CreateNoteAsync(req, userId);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(new { errors = result.Errors });
 
             return Ok(result.Value);
         }
@@ -40,20 +40,33 @@ namespace SanDiaryApi.Controllers
             var result = await _noteService.GetNoteAsync(new GetNoteRequest(id), userId);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(new { errors = result.Errors });
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Note>>> GetAll()
+        {
+            var userId = GetCurrentUserId();
+
+            var result = await _noteService.GetNotesByUserIdAsync(userId);
+
+            if (!result.IsSuccess)
+                return BadRequest(new { errors = result.Errors });
 
             return Ok(result.Value);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Note>> Update(int id, [FromBody] UpdateNoteRequest req)
+        public async Task<ActionResult<Note>> Update(int id, UpdateNoteRequest req)
         {
             var userId = GetCurrentUserId();
 
             var result = await _noteService.UpdateNoteAsync(req, id, userId);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(new { errors = result.Errors });
 
             return Ok(result.Value);
         }
@@ -66,7 +79,7 @@ namespace SanDiaryApi.Controllers
             var result = await _noteService.DeleteNoteAsync(new DeleteNoteRequest(id), userId);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Errors);
+                return BadRequest(new { errors = result.Errors });
 
             return Ok();
         }

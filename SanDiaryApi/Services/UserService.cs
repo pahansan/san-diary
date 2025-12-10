@@ -20,7 +20,7 @@ namespace SanDiaryApi.Services
             return Result<User>.Success(user);
         }
 
-        public async Task<Result<List<User>>> GetAllUsersAsync(GetAllUsersRequest req)
+        public async Task<Result<List<User>>> GetAllUsersAsync()
         {
             var users = await _context.Users.ToListAsync();
             return Result<List<User>>.Success(users);
@@ -44,6 +44,7 @@ namespace SanDiaryApi.Services
                 return Result<bool>.Fail("User does not exist.");
             }
             _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
             return Result<bool>.Success(true);
         }
     }
