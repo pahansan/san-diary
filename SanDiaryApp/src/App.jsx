@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import { AuthPage } from './pages/AuthPage';
+import { NotesPage } from './pages/NotesPage';
+import { NoteDetailPage } from './pages/NoteDetailPage';
+import { AdminDashboard } from './pages/AdminDashboard';
+import { UsersPage } from './pages/UsersPage';
+
+const PrivateRoute = ({ children, requireAdmin = false }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) return <div>Загрузка...</div>;
+
+  if (!user) return <Navigate to="/auth" />;
+
+  if (requireAdmin && user.role !== 'Admin') {
+    return <Navigate to="/notes" />;
+  }
+
+  return children;
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/" element={<Navigate to="/auth" />} />
+
+        <Route path="/notes" element={
+          <PrivateRoute>
+            <NotesPage />
+          </PrivateRoute>
+        } />
+
+        <Route path="/notes/:id" element={
+          <PrivateRoute>
+            <NoteDetailPage />
+          </PrivateRoute>
+        } />
+
+        <Route path="/admin" element={
+          <PrivateRoute requireAdmin={true}>
+            <AdminDashboard />
+          </PrivateRoute>
+        } />
+
+        <Route path="/users" element={
+          <PrivateRoute requireAdmin={true}>
+            <UsersPage />
+          </PrivateRoute>
+        } />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

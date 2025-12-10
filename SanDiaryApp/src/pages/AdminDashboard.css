@@ -1,0 +1,26 @@
+.admin-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.admin-btn {
+    background: white;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    padding: 40px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.admin-btn:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-4px);
+}
+
+.admin-btn h3 {
+    margin-top: 0;
+}
