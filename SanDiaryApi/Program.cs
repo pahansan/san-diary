@@ -1,6 +1,8 @@
 using SanDiaryApi.Data;
 using SanDiaryApi.Services;
+using SanDiaryApi.Models;
 
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -8,16 +10,47 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<NoteService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Введите JWT токен"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
     {
@@ -54,6 +87,35 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var authService = scope.ServiceProvider.GetRequiredService<AuthService>();
+
+    db.Database.Migrate();
+
+    if (!db.Users.Any())
+    {
+        var admin = new User
+        {
+            Email = "admin@local.dev",
+            PasswordHash = "DEV_ONLY",
+            Role = "Admin"
+        };
+
+        db.Users.Add(admin);
+        db.SaveChanges();
+
+        var token = authService.CreateToken(admin);
+
+        app.Logger.LogInformation(
+@"========================================
+DEV ADMIN CREATED
+Email: admin@local.dev
+JWT TOKEN (use in Swagger):
+{Token}
+========================================", token);
+    }
+
 }
 
 app.UseAuthentication();
@@ -61,5 +123,5 @@ app.UseAuthorization();
 
 app.UseCors("AllowFrontend");
 
-
+app.MapControllers();
 app.Run();

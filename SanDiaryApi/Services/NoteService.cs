@@ -10,30 +10,30 @@ namespace SanDiaryApi.Services
     {
         private readonly AppDbContext _context = context;
 
-        public async Task<Result<Note>> CreateNoteAsync(CreateNoteRequest req)
+        public async Task<Result<Note>> CreateNoteAsync(CreateNoteRequest req, int userId)
         {
-            var errors = ValidateNote(req.Title, req.Content, req.Mood, req.UserId);
+            var errors = ValidateNote(req.Title, req.Content, req.Mood, userId);
             if (errors.Count != 0)
             {
                 return Result<Note>.Fail(errors);
             }
 
-            var userExists = await _context.Users.AnyAsync(u => u.Id == req.UserId);
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
             if (!userExists)
             {
                 return Result<Note>.Fail("User does not exist.");
             }
 
-            var note = new Note(req.Title, req.Content, req.Mood, req.UserId);
+            var note = new Note(req.Title, req.Content, req.Mood, userId);
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
 
             return Result<Note>.Success(note);
         }
 
-        public async Task<Result<Note>> GetNoteAsync(GetNoteRequest req)
+        public async Task<Result<Note>> GetNoteAsync(GetNoteRequest req, int userId)
         {
-            var note = await _context.Notes.FirstOrDefaultAsync(n => n.Id == req.Id && n.UserId == req.UserId);
+            var note = await _context.Notes.FirstOrDefaultAsync(n => n.Id == req.Id && n.UserId == userId);
             if (note == null)
             {
                 return Result<Note>.Fail("Note does not exist.");
@@ -41,33 +41,33 @@ namespace SanDiaryApi.Services
             return Result<Note>.Success(note);
         }
 
-        public async Task<Result<List<Note>>> GetNotesByUserIdAsync(GetNotesByUserIdRequest req)
+        public async Task<Result<List<Note>>> GetNotesByUserIdAsync(GetNotesByUserIdRequest req, int userId)
         {
-            var userExists = await _context.Users.AnyAsync(u => u.Id == req.UserId);
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
             if (!userExists)
             {
                 return Result<List<Note>>.Fail("User does not exist.");
             }
-            var notes = await _context.Notes.Where(n => n.UserId == req.UserId).ToListAsync();
+            var notes = await _context.Notes.Where(n => n.UserId == userId).ToListAsync();
             return Result<List<Note>>.Success(notes);
         }
 
-        public async Task<Result<Note>> UpdateNoteAsync(UpdateNoteRequest req)
+        public async Task<Result<Note>> UpdateNoteAsync(UpdateNoteRequest req, int id, int userId)
         {
-            var errors = ValidateNote(req.Title, req.Content, req.Mood, req.UserId);
+            var errors = ValidateNote(req.Title, req.Content, req.Mood, userId);
             if (errors.Count != 0)
             {
                 return Result<Note>.Fail(errors);
             }
 
-            var userExists = await _context.Users.AnyAsync(u => u.Id == req.UserId);
+            var userExists = await _context.Users.AnyAsync(u => u.Id == userId);
             if (!userExists)
             {
                 return Result<Note>.Fail("User does not exist.");
             }
 
             var note = await _context.Notes
-                .FirstOrDefaultAsync(n => n.Id == req.Id && n.UserId == req.UserId);
+                .FirstOrDefaultAsync(n => n.Id == id && n.UserId == userId);
 
             if (note == null)
             {
@@ -82,15 +82,16 @@ namespace SanDiaryApi.Services
             return Result<Note>.Success(note);
         }
 
-        public async Task<Result<bool>> DeleteNoteAsync(DeleteNoteRequest req)
+        public async Task<Result<bool>> DeleteNoteAsync(DeleteNoteRequest req, int userId)
         {
             var note = await _context.Notes
-                .FirstOrDefaultAsync(n => n.Id == req.Id && n.UserId == req.UserId);
+                .FirstOrDefaultAsync(n => n.Id == req.Id && n.UserId == userId);
             if (note == null)
             {
                 return Result<bool>.Fail("Note does not exist.");
             }
             _context.Notes.Remove(note);
+            await _context.SaveChangesAsync();
             return Result<bool>.Success(true);
         }
 

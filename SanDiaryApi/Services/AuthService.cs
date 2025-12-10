@@ -58,17 +58,7 @@ namespace SanDiaryApi.Services
             return Result<string>.Success(CreateToken(user));
         }
 
-        public async Task<Result<User>> GetUserByEmailAsync(string email)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-            {
-                return Result<User>.Fail("User does not exist.");
-            }
-            return Result<User>.Success(user);
-        }
-
-        private string CreateToken(User user)
+        public string CreateToken(User user)
         {
             var claims = new List<Claim>
             {
