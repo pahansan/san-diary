@@ -2,6 +2,7 @@ using SanDiaryApi.Data;
 using SanDiaryApi.Services;
 using SanDiaryApi.Models;
 
+using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -97,12 +98,17 @@ if (app.Environment.IsDevelopment())
 
     if (!db.Users.Any())
     {
+        var adminEmail = "admin@admin.admin";
+        var adminPassword = "admin";
+
         var admin = new User
         {
-            Email = "admin@local.dev",
-            PasswordHash = "DEV_ONLY",
+            Email = adminEmail,
             Role = "Admin"
         };
+
+        var passwordHasher = new PasswordHasher<User>();
+        admin.PasswordHash = passwordHasher.HashPassword(admin, adminPassword);
 
         db.Users.Add(admin);
         db.SaveChanges();

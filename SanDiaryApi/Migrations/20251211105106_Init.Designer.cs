@@ -11,7 +11,7 @@ using SanDiaryApi.Data;
 namespace SanDiaryApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251209143709_Init")]
+    [Migration("20251211105106_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -45,9 +45,7 @@ namespace SanDiaryApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");

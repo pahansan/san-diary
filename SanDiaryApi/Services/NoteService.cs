@@ -24,7 +24,13 @@ namespace SanDiaryApi.Services
                 return Result<Note>.Fail("User does not exist.");
             }
 
-            var note = new Note(req.Title, req.Content, req.Mood, userId);
+            var now = DateTimeOffset.UtcNow;
+            var note = new Note(req.Title, req.Content, req.Mood, userId)
+            {
+                CreatedAt = now,
+                UpdatedAt = now
+            };
+
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
 
@@ -77,6 +83,7 @@ namespace SanDiaryApi.Services
             note.Title = req.Title;
             note.Content = req.Content;
             note.Mood = req.Mood;
+            note.UpdatedAt = DateTimeOffset.UtcNow;
 
             await _context.SaveChangesAsync();
             return Result<Note>.Success(note);

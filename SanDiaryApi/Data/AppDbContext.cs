@@ -51,34 +51,10 @@ namespace SanDiaryApi.Data
                       .ValueGeneratedOnAdd();
 
                 entity.Property(n => n.UpdatedAt)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAddOrUpdate();
+                      .IsRequired();
             });
 
             base.OnModelCreating(modelBuilder);
-        }
-
-        public override int SaveChanges()
-        {
-            UpdateTimestamps();
-            return base.SaveChanges();
-        }
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            UpdateTimestamps();
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
-        private void UpdateTimestamps()
-        {
-            foreach (var entry in ChangeTracker.Entries<Note>())
-            {
-                if (entry.State == EntityState.Modified)
-                {
-                    entry.Entity.UpdatedAt = DateTimeOffset.UtcNow;
-                }
-            }
         }
     }
 }
