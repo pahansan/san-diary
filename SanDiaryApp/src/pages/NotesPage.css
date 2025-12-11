@@ -12,7 +12,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
 }
@@ -22,7 +22,7 @@
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-weight: 600;
 }
@@ -32,7 +32,7 @@
     padding: 12px;
     margin-bottom: 20px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 20px;
     font-size: 16px;
     background: var(--bg-input);
     color: var(--text-primary);
@@ -74,7 +74,7 @@
 .note-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 20px;
     cursor: pointer;
     transition: box-shadow 0.3s;
     display: flex;
@@ -103,7 +103,7 @@
 .mood-indicator {
     color: white;
     padding: 4px 8px;
-    border-radius: 12px;
+    border-radius: 20px;
     font-size: 0.75em;
     font-weight: 600;
     white-space: nowrap;

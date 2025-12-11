@@ -12,7 +12,7 @@
 .admin-btn {
     background: var(--bg-card);
     border: 2px solid var(--bg-button-primary);
-    border-radius: 8px;
+    border-radius: 20px;
     padding: 40px 20px;
     cursor: pointer;
     transition: all 0.3s;

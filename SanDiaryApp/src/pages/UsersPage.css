@@ -16,7 +16,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
     white-space: nowrap;
@@ -31,7 +31,7 @@
     padding: 12px;
     margin-bottom: 20px;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 20px;
     font-size: 16px;
     background: var(--bg-input);
     color: var(--text-primary);
@@ -58,7 +58,7 @@
 .user-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -84,7 +84,7 @@
     background: var(--bg-button-primary);
     color: white;
     padding: 4px 12px;
-    border-radius: 12px;
+    border-radius: 20px;
     font-size: 0.85em;
 }
 
@@ -93,7 +93,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 14px;
 }
