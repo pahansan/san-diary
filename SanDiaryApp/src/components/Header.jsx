@@ -1,9 +1,12 @@
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
+import { FaSun, FaMoon } from 'react-icons/fa';
 import './Header.css';
 
 export const Header = () => {
     const { user, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -17,7 +20,12 @@ export const Header = () => {
         <header className="header">
             <div className="header-content">
                 <span className="user-email">{user.email}</span>
-                <button onClick={handleLogout} className="logout-btn">Выйти</button>
+                <div className="header-actions">
+                    <button onClick={toggleTheme} className="theme-toggle" title="Переключить тему">
+                        {theme === 'light' ? <FaMoon /> : <FaSun />}
+                    </button>
+                    <button onClick={handleLogout} className="logout-btn">Выйти</button>
+                </div>
             </div>
         </header>
     );

@@ -1,3 +1,7 @@
+.admin-dashboard h1 {
+    color: var(--text-primary);
+}
+
 .admin-menu {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -6,8 +10,8 @@
 }
 
 .admin-btn {
-    background: white;
-    border: 2px solid #3498db;
+    background: var(--bg-card);
+    border: 2px solid var(--bg-button-primary);
     border-radius: 8px;
     padding: 40px 20px;
     cursor: pointer;
@@ -16,11 +20,25 @@
 }
 
 .admin-btn:hover {
-    background: #3498db;
+    background: var(--bg-button-primary);
     color: white;
     transform: translateY(-4px);
 }
 
 .admin-btn h3 {
     margin-top: 0;
+    color: var(--text-primary);
+}
+
+.admin-btn:hover h3 {
+    color: white;
+}
+
+.admin-btn p {
+    margin-bottom: 0;
+    color: var(--text-secondary);
+}
+
+.admin-btn:hover p {
+    color: rgba(255, 255, 255, 0.9);
 }

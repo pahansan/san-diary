@@ -8,10 +8,11 @@
 
 .page-header h1 {
     margin: 0;
+    color: var(--text-primary);
 }
 
 .btn-back {
-    background: #95a5a6;
+    background: var(--bg-button-secondary);
     color: white;
     border: none;
     padding: 8px 16px;
@@ -22,33 +23,32 @@
 }
 
 .btn-back:hover {
-    background: #7f8c8d;
+    background: var(--bg-button-secondary-hover);
 }
 
-/* Поле поиска */
 .search-input {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 16px;
+    background: var(--bg-input);
+    color: var(--text-primary);
 }
 
 .search-input:focus {
-    border-color: #3498db;
+    border-color: var(--bg-button-primary);
     outline: none;
 }
 
-/* Сообщение "не найдено" */
 .no-results {
     text-align: center;
-    color: #666;
+    color: var(--text-secondary);
     padding: 40px;
     font-style: italic;
 }
 
-/* Список пользователей */
 .users-list {
     display: flex;
     flex-direction: column;
@@ -56,18 +56,18 @@
 }
 
 .user-card {
-    background: white;
+    background: var(--bg-card);
     padding: 20px;
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px var(--shadow);
     transition: box-shadow 0.2s;
 }
 
 .user-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 8px var(--shadow-hover);
 }
 
 .user-info {
@@ -76,8 +76,12 @@
     gap: 12px;
 }
 
+.user-info strong {
+    color: var(--text-primary);
+}
+
 .role-badge {
-    background: #3498db;
+    background: var(--bg-button-primary);
     color: white;
     padding: 4px 12px;
     border-radius: 12px;
@@ -85,7 +89,7 @@
 }
 
 .btn-danger {
-    background: #e74c3c;
+    background: var(--bg-button-danger);
     color: white;
     border: none;
     padding: 8px 16px;
@@ -95,5 +99,5 @@
 }
 
 .btn-danger:hover {
-    background: #c0392b;
+    background: var(--bg-button-danger-hover);
 }

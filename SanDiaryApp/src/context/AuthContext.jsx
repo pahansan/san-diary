@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // Decode token to get user info
             const payload = JSON.parse(atob(token.split('.')[1]));
             setUser({
                 email: payload.email,
