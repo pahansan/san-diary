@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import api from '../api/client';
 import './UsersPage.css';
 
 export const UsersPage = () => {
+    const navigate = useNavigate();
     const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -33,18 +36,38 @@ export const UsersPage = () => {
         }
     };
 
+    const filteredUsers = users.filter(user =>
+        user.email.toLowerCase().includes(search.toLowerCase())
+    );
+
     return (
         <div className="users-page">
             <Header />
             <div className="container">
-                <h1>Управление пользователями</h1>
+                <div className="page-header">
+                    <button onClick={() => navigate('/admin')} className="btn-back">
+                        ← Назад в панель администратора
+                    </button>
+                    <h1>Управление пользователями</h1>
+                </div>
+
+                <input
+                    type="text"
+                    placeholder="Поиск по email..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="search-input"
+                />
+
                 {loading ? (
                     <div>Загрузка...</div>
+                ) : filteredUsers.length === 0 ? (
+                    <div className="no-results">Пользователи не найдены</div>
                 ) : (
                     <div className="users-list">
-                        {users.map(user => (
+                        {filteredUsers.map(user => (
                             <div key={user.id} className="user-card">
-                                <div>
+                                <div className="user-info">
                                     <strong>{user.email}</strong>
                                     <span className="role-badge">{user.role}</span>
                                 </div>
