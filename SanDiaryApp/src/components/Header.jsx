@@ -6,7 +6,6 @@ import './Header.css';
 
 export const Header = () => {
     const { user, logout } = useAuth();
-    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -19,13 +18,8 @@ export const Header = () => {
     return (
         <header className="header">
             <div className="header-content">
-                <span className="user-email">{user.email}</span>
-                <div className="header-actions">
-                    <button onClick={toggleTheme} className="theme-toggle" title="Переключить тему">
-                        {theme === 'light' ? <FaMoon /> : <FaSun />}
-                    </button>
-                    <button onClick={handleLogout} className="logout-btn">Выйти</button>
-                </div>
+                <span className="user-email">{user?.email || '—'}</span> { }
+                <button onClick={handleLogout} className="logout-btn">Выйти</button>
             </div>
         </header>
     );

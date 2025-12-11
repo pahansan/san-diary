@@ -3,6 +3,26 @@ import api from '../api/client';
 
 const AuthContext = createContext(null);
 
+const CLAIMS = {
+    EMAIL: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress',
+    ROLE: 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role',
+    USER_ID: 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+};
+
+const decodeToken = (token) => {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return {
+            email: payload[CLAIMS.EMAIL],
+            role: payload[CLAIMS.ROLE],
+            userId: parseInt(payload[CLAIMS.USER_ID], 10)
+        };
+    } catch (error) {
+        console.error('Failed to decode token:', error);
+        return null;
+    }
+};
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -10,21 +30,26 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            setUser({
-                email: payload.email,
-                role: payload.role,
-                userId: parseInt(payload.nameid),
-            });
+            const decoded = decodeToken(token);
+            if (decoded) {
+                setUser(decoded);
+            } else {
+                localStorage.removeItem('token');
+            }
         }
         setLoading(false);
     }, []);
 
     const login = async (email, password) => {
         const response = await api.post('/auth/login', { email, password });
-        const { token, role, userId } = response.data;
-        localStorage.setItem('token', token);
-        setUser({ email, role, userId });
+        const { token } = response.data;
+
+        const decoded = decodeToken(token);
+        if (decoded) {
+            localStorage.setItem('token', token);
+            setUser(decoded);
+        }
+
         return response.data;
     };
 
