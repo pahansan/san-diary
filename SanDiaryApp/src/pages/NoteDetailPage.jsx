@@ -163,8 +163,20 @@ export const NoteDetailPage = () => {
                         <h1>{note.title}</h1>
                         <div className="note-meta">
                             <span>Настроение: {moodLabels[note.mood]}</span>
-                            <span>Создано: {new Date(note.createdAt).toLocaleString()}</span>
-                            <span>Изменено: {new Date(note.updatedAt).toLocaleString()}</span>
+                            <span>Создано: {new Date(note.createdAt).toLocaleString('ru-RU', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}</span>
+                            <span>Изменено: {new Date(note.updatedAt).toLocaleString('ru-RU', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}</span>
                         </div>
                         <div className="note-content">
                             <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
