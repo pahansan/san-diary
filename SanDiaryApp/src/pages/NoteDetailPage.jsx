@@ -151,7 +151,7 @@ export const NoteDetailPage = () => {
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
                                     className="content-textarea"
-                                    placeholder="Поддерживается Markdown..."
+                                    placeholder="Ваши умные (надеюсь) мысли..."
                                 />
                             )}
                         </div>
